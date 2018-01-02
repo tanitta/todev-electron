@@ -1,4 +1,5 @@
 .DS_Store
+.todev/
 dist/electron/*
 dist/web/*
 build/*
