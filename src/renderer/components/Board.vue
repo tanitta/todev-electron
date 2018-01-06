@@ -1,7 +1,6 @@
 <template>
   <div class="board">
     <h1>BoardName</h1>
-    <task-editor/>
     <div class="lists">
       <template v-for="list in lists">
         <task-list v-bind:list="list" @open-editor="openEditor" @add-new-task="addNewTask"></task-list>
@@ -14,7 +13,6 @@
 
 <script>
   import TaskList from './TaskList'
-  import TaskEditor from './TaskEditor'
   import EventBus from './../event-bus'
   import FileSystem from 'fs'
   import Mkdirp from 'mkdirp'
@@ -22,7 +20,7 @@
 
   export default{
     name: 'board',
-    components: { TaskList, TaskEditor },
+    components: { TaskList },
     methods: {
       openEditor: function (task, editorOption) {
         this.selectedTasks = [task]
@@ -125,7 +123,6 @@
 body { font-family: 'Source Sans Pro', sans-serif; }
 
 .board{
-  color: #DDDDDD;
   margin: 48px;
 
 }
