@@ -6,7 +6,7 @@
             <div class="modal-header">
               <slot name="header">
                 <template v-if="isChangingName">
-                  <input v-model="nameOnForm" @keydown.enter="changeName()" @blur="changeName()" ref="r1" />
+                  <input v-model="nameOnForm" @keydown.enter="changeName()" @blur="cancelChangingName()" ref="r1" />
                 </template>
                 <template v-else="">
                   <span @click="focusName">{{nameOnForm}}</span>
@@ -63,6 +63,7 @@ export default{
       this.isChangingName = false
     },
     changeName: function () {
+      console.log('changeName')
       if (this.nameOnForm.length > 0) {
         this.name = this.nameOnForm
       } else {
@@ -76,7 +77,7 @@ export default{
       this.showEditor = true
       if (payload.isFocus) {
         this.focusName()
-        this.name = ''
+        // this.name = ''
       }
       this.nameOnForm = this.name
     },
@@ -85,16 +86,26 @@ export default{
       this.$nextTick(function () { this.$refs.r1.focus() })
     },
     close: function () {
+      this.changeName()
       this.isChangingName = false
       this.targetTasks = []
       this.showEditor = false
     },
     removeTask: function () {
       EventBus.$emit('remove-task', this.targetTasks[0])
+      this.isChangingName = false
+      this.targetTasks = []
+      this.showEditor = false
+    },
+    escapeKeyListener: function () {
+      if (event.keyCode === 27 && this.showEditor) {
+        this.close()
+      }
     }
   },
   mounted: function () {
     EventBus.$on('open-task-editor', this.open)
+    document.addEventListener('keyup', this.escapeKeyListener)
   }
 }
 </script>

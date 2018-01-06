@@ -31,7 +31,9 @@
         this.$emit('add-new-task', this.list)
       },
       removeList: function () {
-        EventBus.$emit('remove-list', this.list)
+        if (confirm('Remove task?')) {
+          EventBus.$emit('remove-list', this.list)
+        }
       }
     }
   }
