@@ -15,6 +15,9 @@
             </div>
             <div class="modal-footer">
               <slot name="footer">
+                <br>Prevs:</br>
+                <br>Nexts:</br>
+                <br/>
                 Description: {{description}}
                 <button class="modal-default-button" @click="removeTask">Remove</button>
                 <button class="modal-default-button" @click="close">Close</button>
@@ -63,7 +66,7 @@ export default{
       this.isChangingName = false
     },
     changeName: function () {
-      console.log('changeName')
+      if (!this.showEditor) return
       if (this.nameOnForm.length > 0) {
         this.name = this.nameOnForm
       } else {
@@ -88,7 +91,6 @@ export default{
     close: function () {
       this.changeName()
       this.isChangingName = false
-      this.targetTasks = []
       this.showEditor = false
     },
     removeTask: function () {
