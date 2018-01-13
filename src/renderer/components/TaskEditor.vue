@@ -1,32 +1,32 @@
 <template>
-    <transition name="modal">
-      <div class="modal-mask" v-if="showEditor">
-        <div class="modal-wrapper">
-          <div class="modal-container">
-            <div class="modal-header">
-              <slot name="header">
-                <template v-if="isChangingName">
-                  <input v-model="nameOnForm" @keydown.enter="changeName()" @blur="cancelChangingName()" ref="r1" />
-                </template>
-                <template v-else="">
-                  <span @click="focusName">{{nameOnForm}}</span>
-                </template>
-              </slot>
-            </div>
-            <div class="modal-footer">
-              <slot name="footer">
-                <br>Prevs:</br>
-                <br>Nexts:</br>
-                <br/>
-                Description: {{description}}
-                <button class="modal-default-button" @click="removeTask">Remove</button>
-                <button class="modal-default-button" @click="close">Close</button>
-              </slot>
-            </div>
+  <transition name="modal">
+    <div class="modal-mask" v-if="showEditor">
+      <div class="modal-wrapper">
+        <div class="modal-container">
+          <div class="modal-header">
+            <slot name="header">
+              <template v-if="isChangingName">
+                <input v-model="nameOnForm" @keydown.enter="changeName()" @blur="cancelChangingName()" ref="r1" />
+              </template>
+              <template v-else="">
+                <span @click="focusName">{{nameOnForm}}</span>
+              </template>
+            </slot>
+          </div>
+          <div class="modal-footer">
+            <slot name="footer">
+              <br>Prevs:</br>
+              <br>Nexts:</br>
+              <br/>
+              Description: {{description}}
+              <button class="modal-default-button" @click="removeTask">Remove</button>
+              <button class="modal-default-button" @click="close">Close</button>
+            </slot>
           </div>
         </div>
       </div>
-    </transition>
+    </div>
+  </transition>
 </template>
 
 <script>
