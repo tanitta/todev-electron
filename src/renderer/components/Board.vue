@@ -31,6 +31,7 @@
         if (editorOption) {
           payload.isFocus = editorOption.isFocus
         }
+        payload.lists = this.lists
         EventBus.$emit('open-task-editor', payload)
       },
       addNewTask: function (list) {

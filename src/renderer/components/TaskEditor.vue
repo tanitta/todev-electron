@@ -16,7 +16,9 @@
           <div class="modal-footer">
             <slot name="footer">
               <br>Prevs:</br>
+              <dep-selector :event-bus="prevDepEventBus" :deps="prevDeps" :lists="lists"/>
               <br>Nexts:</br>
+              <dep-selector :event-bus="nextDepEventBus" :dpes="nextDeps" :lists="lists"/>
               <br/>
               Description: {{description}}
               <button class="modal-default-button" @click="removeTask">Remove</button>
@@ -31,18 +33,34 @@
 
 <script>
 import EventBus from './../event-bus'
+import DepSelector from './DepSelector'
+import Vue from 'vue'
 
 export default{
   name: 'task-editor',
+  components: { DepSelector },
   data: function () {
     return {
       showEditor: false,
       isChangingName: false,
       targetTasks: [],
-      nameOnForm: ''
+      nameOnForm: '',
+      prevDepEventBus: new Vue(),
+      nextDepEventBus: new Vue(),
+      lists: []
     }
   },
   computed: {
+    prevDeps: {
+      get: function () {
+        return this.targetTasks[0].prevs
+      }
+    },
+    nextDeps: {
+      get: function () {
+        return this.targetTasks[0].nexts
+      }
+    },
     description: {
       get: function () {
         return this.targetTasks[0].description
@@ -77,6 +95,7 @@ export default{
     },
     open: function (payload) {
       this.targetTasks = payload.selectedTasks
+      this.lists = payload.lists
       this.showEditor = true
       if (payload.isFocus) {
         this.focusName()
@@ -115,7 +134,6 @@ export default{
 <style>
 .modal-mask {
   position: fixed;
-  z-index: 9998;
   top: 0;
   left: 0;
   width: 100%;
