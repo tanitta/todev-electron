@@ -16,9 +16,9 @@
           <div class="modal-footer">
             <slot name="footer">
               <br>Prevs:</br>
-              <dep-selector :event-bus="prevDepEventBus" :deps="prevDeps" :lists="lists"/>
+              <dep-selector :type="'prev'" :event-bus="prevDepEventBus" :dep-ids-init="prevDepIds" :lists="lists" :self-task-id="id"/>
               <br>Nexts:</br>
-              <dep-selector :event-bus="nextDepEventBus" :dpes="nextDeps" :lists="lists"/>
+              <dep-selector :type="'next'" :event-bus="nextDepEventBus" :dep-ids-init="nextDepIds" :lists="lists" :self-task-id="id"/>
               <br/>
               Description: {{description}}
               <button class="modal-default-button" @click="removeTask">Remove</button>
@@ -51,14 +51,20 @@ export default{
     }
   },
   computed: {
-    prevDeps: {
+    prevDepIds: {
       get: function () {
         return this.targetTasks[0].prevs
+      },
+      set: function (ids) {
+        this.targetTasks[0].prevs = ids
       }
     },
-    nextDeps: {
+    nextDepIds: {
       get: function () {
         return this.targetTasks[0].nexts
+      },
+      set: function (ids) {
+        this.targetTasks[0].nexts = ids
       }
     },
     description: {
@@ -75,6 +81,11 @@ export default{
       },
       set: function (n) {
         this.targetTasks[0].name = n
+      }
+    },
+    id: {
+      get: function () {
+        return this.targetTasks[0].id
       }
     }
   },
@@ -101,6 +112,15 @@ export default{
         this.focusName()
         // this.name = ''
       }
+
+      this.prevDepEventBus.$on('setDepsToTask', depIds => {
+        this.prevDepIds = depIds
+      })
+      this.nextDepEventBus.$on('setDepsToTask', depIds => {
+        this.nextDepIds = depIds
+      })
+      this.prevDepEventBus.$emit('setDepsToSelector', this.prevDepIds)
+      this.nextDepEventBus.$emit('setDepsToSelector', this.nextDepIds)
       this.nameOnForm = this.name
     },
     focusName: function () {

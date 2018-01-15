@@ -36,7 +36,7 @@
       },
       addNewTask: function (list) {
         let date = new Date()
-        let newTask = {name: 'new task', description: '', id: date.getTime()}
+        let newTask = {name: 'new task', description: '', id: date.getTime(), prevs: [], nexts: []}
         list.tasks.push(newTask)
         this.openEditor(newTask, {isFocus: true})
       },
