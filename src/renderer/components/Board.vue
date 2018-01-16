@@ -5,7 +5,7 @@
       <template v-for="list in lists">
         <task-list v-bind:list="list" @open-editor="openEditor" @add-new-task="addNewTask"></task-list>
       </template>
-      <button v-on:click="addNewList">Add List</button>
+      <el-button type="default" size="mini" icon="el-icon-plus" v-on:click="addNewList"></el-button>
     </div>
   </div>
 </div>
@@ -46,6 +46,14 @@
         this.lists.push(newList)
       },
       removeTask: function (task, list) {
+        task.prevs.map(depTaskId => {
+          let depTask = this.depTaskFromId(depTaskId)
+          depTask.nexts = depTask.nexts.filter(dt => dt !== task.id)
+        })
+        task.nexts.map(depTaskId => {
+          let depTask = this.depTaskFromId(depTaskId)
+          depTask.prevs = depTask.prevs.filter(dt => dt !== task.id)
+        })
         if (list) {
           let targetList = this.lists.filter(l => l.id === list.id)
           targetList.tasks = targetList.tasks.filter(t => t.id !== task.id)
@@ -54,6 +62,18 @@
             this.lists[listIndex].tasks = this.lists[listIndex].tasks.filter(t => t.id !== task.id)
           }
         }
+      },
+      depTaskFromId: function (id) {
+        let tasksMatchedToId = this.tasks().filter(task => { return task.id === id })
+        console.assert(tasksMatchedToId.length === 1)
+        return tasksMatchedToId[0]
+      },
+      tasks: function () {
+        let tasks = []
+        for (var l of this.lists) {
+          Array.prototype.push.apply(tasks, l.tasks)
+        }
+        return tasks
       },
       removeList: function (list) {
         this.lists = this.lists.filter(l => l.id !== list.id)

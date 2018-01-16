@@ -8,8 +8,8 @@
           <task-card  v-bind:task="task" @open-editor="openEditor"></task-card>
         </template>
     </div>
-    <button v-on:click="addNewTask">Add Task</button>
-    <button v-on:click="removeList">Remove</button>
+    <el-button type="danger" size="mini" icon="el-icon-delete" v-on:click="removeList"></el-button>
+    <el-button type="default" size="mini" icon="el-icon-plus" v-on:click="addNewTask"></el-button>
   </div>
 </template>
 

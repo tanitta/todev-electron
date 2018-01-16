@@ -15,14 +15,18 @@
           </div>
           <div class="modal-footer">
             <slot name="footer">
-              <br>Prevs:</br>
-              <dep-selector :type="'prev'" :event-bus="prevDepEventBus" :dep-ids-init="prevDepIds" :lists="lists" :self-task-id="id"/>
-              <br>Nexts:</br>
-              <dep-selector :type="'next'" :event-bus="nextDepEventBus" :dep-ids-init="nextDepIds" :lists="lists" :self-task-id="id"/>
-              <br/>
-              Description: {{description}}
-              <button class="modal-default-button" @click="removeTask">Remove</button>
-              <button class="modal-default-button" @click="close">Close</button>
+              <div>
+                <br>Prevs:</br>
+                <dep-selector :type="'prev'" :event-bus="prevDepEventBus" :dep-ids-init="prevDepIds" :lists="lists" :self-task-id="id"/>
+                <br>Nexts:</br>
+                <dep-selector :type="'next'" :event-bus="nextDepEventBus" :dep-ids-init="nextDepIds" :lists="lists" :self-task-id="id"/>
+                <br/>
+                Description: {{description}}
+              </div>
+              <div>
+                <el-button type="danger" size="mini" icon="el-icon-delete" v-on:click="removeTask"></el-button>
+                <el-button type="default" size="mini" icon="el-icon-close" v-on:click="close"></el-button>
+              </div>
             </slot>
           </div>
         </div>

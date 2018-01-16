@@ -3,7 +3,7 @@
     <template v-for="depId in depIds">
       <div>
         {{depName(depId)}}
-        <button v-on:click="removeDep(depId)">Remove</button>
+        <el-button type="danger" size="mini" icon="el-icon-delete" v-on:click="removeDep(depId)"></el-button>
       </div>             
     </template>
     <el-select
@@ -21,7 +21,8 @@
         :value="item.id">
       </el-option>
     </el-select>
-    <button v-on:click="addNewDep">Add</button>
+
+    <el-button type="default" size="mini" icon="el-icon-plus" v-on:click="addNewDep"></el-button>
   </div>
 </template>
 
@@ -69,10 +70,26 @@
       },
       removeDep: function (id) {
         this.depIds = this.depIds.filter(depId => depId !== id)
+
+        let depTargetTask = this.taskFromId(id)
+        if (this.type === 'prev') {
+          depTargetTask.nexts = depTargetTask.nexts.filter(depId => depId !== this.selfTaskId)
+        }
+        if (this.type === 'next') {
+          depTargetTask.prevs = depTargetTask.prevs.filter(depId => depId !== this.selfTaskId)
+        }
       },
       addNewDep: function () {
         if (this.depId.length === 0) { return }
         this.depIds.push(this.depId)
+        let depTargetTask = this.taskFromId(this.depId)
+        if (this.type === 'prev') {
+          depTargetTask.nexts.push(this.selfTaskId)
+        }
+        if (this.type === 'next') {
+          depTargetTask.prevs.push(this.selfTaskId)
+        }
+
         this.depId = ''
       },
       remoteMethod: function (query) {
@@ -92,7 +109,17 @@
         } else {
           this.options4 = []
         }
+      },
+      taskFromId: function (id) {
+        let tasks = []
+        for (var l of this.lists) {
+          Array.prototype.push.apply(tasks, l.tasks)
+        }
+        let tasksMatchedToId = tasks.filter(task => { return task.id === id })
+        console.assert(tasksMatchedToId.length === 1)
+        return tasksMatchedToId[0]
       }
+
     }
   }
 </script>
