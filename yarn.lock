@@ -7473,6 +7473,10 @@ to-fast-properties@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/to-fast-properties/-/to-fast-properties-1.0.3.tgz#b83571fa4d8c25b82e231b06e3a3055de4ca1a47"
 
+topological-sort@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/topological-sort/-/topological-sort-0.1.5.tgz#5c38d264b98b6e296b2ab2e25e54c40eb6e10e1d"
+
 toposort@^1.0.0:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/toposort/-/toposort-1.0.6.tgz#c31748e55d210effc00fdcdc7d6e68d7d7bb9cec"

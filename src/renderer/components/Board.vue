@@ -2,13 +2,13 @@
   <div class="board">
     <h1>BoardName</h1>
     <div class="lists">
-      <template v-for="list in lists">
+      <template v-for="list in board.lists">
         <task-list v-bind:list="list" @open-editor="openEditor" @add-new-task="addNewTask"></task-list>
       </template>
       <el-button type="default" size="mini" icon="el-icon-plus" v-on:click="addNewList"></el-button>
     </div>
+    <dep-tree :board="board"/>
   </div>
-</div>
 </template>
 
 <script>
@@ -17,10 +17,25 @@
   import FileSystem from 'fs'
   import Mkdirp from 'mkdirp'
   import Path from 'path'
+  import DepTree from './DepTree'
 
   export default{
     name: 'board',
-    components: { TaskList },
+    components: {
+      TaskList,
+      DepTree
+    },
+
+    computed: {
+      lists: {
+        get: function () {
+          return this.board.lists
+        },
+        set: function (lists) {
+          this.board.lists = lists
+        }
+      }
+    },
     methods: {
       openEditor: function (task, editorOption) {
         this.selectedTasks = [task]
@@ -47,6 +62,7 @@
       },
       removeTask: function (task, list) {
         task.prevs.map(depTaskId => {
+          console.log(this.board)
           let depTask = this.depTaskFromId(depTaskId)
           depTask.nexts = depTask.nexts.filter(dt => dt !== task.id)
         })
@@ -63,17 +79,17 @@
           }
         }
       },
-      depTaskFromId: function (id) {
-        let tasksMatchedToId = this.tasks().filter(task => { return task.id === id })
-        console.assert(tasksMatchedToId.length === 1)
-        return tasksMatchedToId[0]
-      },
       tasks: function () {
         let tasks = []
         for (var l of this.lists) {
           Array.prototype.push.apply(tasks, l.tasks)
         }
         return tasks
+      },
+      depTaskFromId: function (id) {
+        let tasksMatchedToId = this.tasks().filter(task => { return task.id === id })
+        console.assert(tasksMatchedToId.length === 1)
+        return tasksMatchedToId[0]
       },
       removeList: function (list) {
         this.lists = this.lists.filter(l => l.id !== list.id)
@@ -98,7 +114,7 @@
           FileSystem.writeFileSync(listsFilePath, '[]')
         }
         let jsonString = FileSystem.readFileSync(listsFilePath, 'utf8')
-        this.lists = JSON.parse(jsonString)
+        this.board = {lists: JSON.parse(jsonString)}
       }
     },
     data: function () {
@@ -106,21 +122,9 @@
         showEditor: false,
         editorOption: {},
         selectedTasks: [],
-        lists: [
-          {
-            id: 0,
-            name: 'List1',
-            tasks: [
-              {name: 'Wash dishes', description: 'many many dishes', id: 1}
-            ]
-          },
-          {
-            id: 1,
-            name: 'List2',
-            tasks: [
-            ]
-          }
-        ]
+        board: {
+          lists: []
+        }
       }
     },
     watch: {

@@ -1,8 +1,7 @@
 <template>
   <div class="main-page">
-    <task-editor/>
     <board></board>
-    <dep-tree></dep-tree>
+    <task-editor/>
   </div>
 </template>
 

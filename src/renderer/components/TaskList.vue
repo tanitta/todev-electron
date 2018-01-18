@@ -45,7 +45,8 @@
   vertical-align: top;
   width: 300px;
   background-color: #DDDDDD;
-  margin: 6px;
+  margin-left: 6px;
+  margin-right: 6px;
   padding: 6px;
 }
 
