@@ -147,8 +147,6 @@
 body { font-family: 'Source Sans Pro', sans-serif; }
 
 .board{
-  margin-top: 48px;
-  margin-bottom: 48px;
   height: 100%;
   display:flex;
   flex-direction: row;

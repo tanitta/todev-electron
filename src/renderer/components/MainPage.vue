@@ -29,7 +29,9 @@
 
 <style>
   .main-page{
+    position: absolute;
     color: #DDDDDD;
-    height: 100%;
+    top: 0;
+    height: 100vh;
   }
 </style>

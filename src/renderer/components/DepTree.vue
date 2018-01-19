@@ -22,7 +22,6 @@
     ],
     methods: {
       depSort: function () {
-        console.log('sort tree')
         let sortOp = new TopSort(new Map())
         let edges = []
         for (let task of this.tasks()) {
@@ -43,39 +42,33 @@
         return Array.from(sorted.values())
       },
       drawCanvas: function (edges) {
-        console.log('redraw canvas')
-        console.log(edges)
         let canvasElement = document.getElementById('dep-tree-canvas')
+        let taskContainerRect = document.getElementById('tree-container').getBoundingClientRect()
+        canvasElement.width = taskContainerRect.width
+        canvasElement.height = taskContainerRect.height
+
         let ctx = canvasElement.getContext('2d')
         let canvasPos = document.getElementById('dep-tree-canvas').getBoundingClientRect()
 
         ctx.clearRect(0, 0, canvasPos.width, canvasPos.height)
-        ctx.fillStyle = '#AAAAAA'
-        ctx.strokeStyle = '#AAAAAA'
+        let color = 'rgb(230, 230, 230)'
+        ctx.fillStyle = color
+        ctx.strokeStyle = color
+        ctx.lineWidth = 3
         let offset = 10
-
-        this.tasks().forEach((task) => {
-          let taskRect = this.$refs['t' + task.id][0].getBoundingClientRect()
-          let center = {
-            x: offset,
-            y: taskRect.top - canvasPos.top + taskRect.height / 2
-          }
-          ctx.beginPath()
-          ctx.arc(center.x, center.y, 6, 0, Math.PI * 2, true)
-          ctx.fill()
-        })
+        let radius = 8
 
         edges.forEach((edge) => {
           let refFrom = this.$refs['t' + edge.from][0].getBoundingClientRect()
           let refTo = this.$refs['t' + edge.to][0].getBoundingClientRect()
 
           let startPos = {
-            x: refFrom.left - canvasPos.left + offset,
+            x: refFrom.left - canvasPos.left + offset + radius,
             y: refFrom.top - canvasPos.top + refFrom.height / 2
           }
 
           let finishPos = {
-            x: refTo.left - canvasPos.left + offset,
+            x: refTo.left - canvasPos.left + offset + radius,
             y: refTo.top - canvasPos.top + refTo.height / 2
           }
 
@@ -89,7 +82,7 @@
           ctx.beginPath()
           ctx.moveTo(startPos.x, startPos.y)
           ctx.bezierCurveTo(
-            startPos.x + distance * 0.2,
+            startPos.x + distance * 0.1,
             startPos.y,
             controlPoint.x,
             controlPoint.y - distance / 2,
@@ -99,12 +92,23 @@
           ctx.bezierCurveTo(
             controlPoint.x,
             controlPoint.y + distance / 2,
-            finishPos.x + distance * 0.2,
+            finishPos.x + distance * 0.1,
             finishPos.y,
             finishPos.x,
             finishPos.y
           )
           ctx.stroke()
+        })
+
+        this.tasks().forEach((task) => {
+          let taskRect = this.$refs['t' + task.id][0].getBoundingClientRect()
+          let center = {
+            x: offset,
+            y: taskRect.top - canvasPos.top + taskRect.height / 2
+          }
+          ctx.beginPath()
+          ctx.arc(center.x, center.y, radius, 0, Math.PI * 2, true)
+          ctx.fill()
         })
       },
       tasks: function () {
@@ -142,7 +146,6 @@
   }
 
   .task-name {
-    background-color: rgba(240, 240, 240, 0.5);
     color: #AAAAAA;
     margin-left:100px;
     margin-top: 10px;
@@ -150,5 +153,6 @@
     padding:6px;
   }
   .task-container{
+    background-color: rgba(240, 240, 240, 0.3);
   }
 </style>
