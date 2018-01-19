@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="dep-tree">
     <canvas id="dep-tree-canvas" width=500 height=1000></canvas>
     <section id="tree-container">
       <template v-for="task in depSort()">
@@ -90,21 +90,29 @@
 </script>
 
 <style>
-#dep-tree-canvas{
+  .dep-tree {
+    box-sizing: border-box;
+    position:relative;
+    flex: 0 1 auto;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  #dep-tree-canvas{
     position:absolute;
     border:1px solid red;
-}
+  }
 
-#tree-container {
-  position: relative;
-  top: 0;
-  left: 0;
-}
+  #tree-container {
+    position: relative;
+    top: 0;
+    left: 0;
+  }
 
-.task-name {
-  margin-left:100px;
-  padding: 6px;
-}
-.task-container{
-}
+  .task-name {
+    margin-left:100px;
+    padding: 6px;
+  }
+  .task-container{
+  }
 </style>

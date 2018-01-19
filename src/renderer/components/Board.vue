@@ -1,6 +1,5 @@
 <template>
   <div class="board">
-    <h1>BoardName</h1>
     <div class="lists">
       <template v-for="list in board.lists">
         <task-list v-bind:list="list" @open-editor="openEditor" @add-new-task="addNewTask"></task-list>
@@ -151,9 +150,14 @@ body { font-family: 'Source Sans Pro', sans-serif; }
   margin-top: 48px;
   margin-bottom: 48px;
   height: 100%;
+  display:flex;
+  flex-direction: row;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
 
 }
 .lists{
+  flex: 0 1 auto;
   user-select: none;
   white-space: nowrap;
   overflow-x: auto;
@@ -164,6 +168,6 @@ body { font-family: 'Source Sans Pro', sans-serif; }
   right: 0;
   bottom: 0;
   left: 0;
-  height: 50%;
+  height: 100%;
 }
 </style>
