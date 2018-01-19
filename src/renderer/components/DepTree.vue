@@ -107,6 +107,12 @@
             x: offset,
             y: taskRect.top - canvasPos.top + taskRect.height / 2
           }
+
+          if (task.prevs.length === 0) {
+            ctx.fillStyle = 'hsl(100, 80%, 70%)'
+          } else {
+            ctx.fillStyle = 'rgb(230, 230, 230)'
+          }
           ctx.beginPath()
           ctx.arc(center.x, center.y, radius + numNexts * 2, 0, Math.PI * 2, true)
           ctx.fill()
