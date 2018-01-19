@@ -6,7 +6,7 @@
           <div class="modal-header">
             <slot name="header">
               <template v-if="isChangingName">
-                <input v-model="nameOnForm" @keydown.enter="changeName()" @blur="cancelChangingName()" ref="r1" />
+                <input v-model="nameOnForm" @keydown.enter="changeName()" @blur="changeName()" ref="r1" />
               </template>
               <template v-else="">
                 <span @click="focusName">{{nameOnForm}}</span>
