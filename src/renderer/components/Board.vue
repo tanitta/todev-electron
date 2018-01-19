@@ -148,7 +148,9 @@
 body { font-family: 'Source Sans Pro', sans-serif; }
 
 .board{
-  margin: 48px;
+  margin-top: 48px;
+  margin-bottom: 48px;
+  height: 100%;
 
 }
 .lists{
@@ -162,5 +164,6 @@ body { font-family: 'Source Sans Pro', sans-serif; }
   right: 0;
   bottom: 0;
   left: 0;
+  height: 50%;
 }
 </style>

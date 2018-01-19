@@ -30,5 +30,6 @@
 <style>
   .main-page{
     color: #DDDDDD;
+    height: 100%;
   }
 </style>
