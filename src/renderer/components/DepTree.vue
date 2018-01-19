@@ -55,8 +55,8 @@
         ctx.fillStyle = color
         ctx.strokeStyle = color
         ctx.lineWidth = 3
-        let offset = 10
-        let radius = 8
+        let offset = 16
+        let radius = 5
 
         edges.forEach((edge) => {
           let refFrom = this.$refs['t' + edge.from][0].getBoundingClientRect()
@@ -102,12 +102,13 @@
 
         this.tasks().forEach((task) => {
           let taskRect = this.$refs['t' + task.id][0].getBoundingClientRect()
+          let numNexts = task.nexts.length
           let center = {
             x: offset,
             y: taskRect.top - canvasPos.top + taskRect.height / 2
           }
           ctx.beginPath()
-          ctx.arc(center.x, center.y, radius, 0, Math.PI * 2, true)
+          ctx.arc(center.x, center.y, radius + numNexts * 2, 0, Math.PI * 2, true)
           ctx.fill()
         })
       },
