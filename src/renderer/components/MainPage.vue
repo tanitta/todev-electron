@@ -1,7 +1,6 @@
 <template>
   <div class="main-page">
     <board></board>
-    <task-editor/>
   </div>
 </template>
 
@@ -12,17 +11,14 @@
   export default{
     name: 'main-page',
     components: { Board, TaskEditor, DepTree },
+    mounted: function () {
+      this.$store.commit('loadBoard')
+      this.$store.subscribe((mutation, state) => {
+        if (mutation.type === 'saveBoard') return
+        this.$store.commit('saveBoard')
+      })
+    },
     methods: {
-    },
-    data: function () {
-      return {
-        board: {
-          name: 'board',
-          lists: []
-        }
-      }
-    },
-    watch: {
     }
   }
 </script>

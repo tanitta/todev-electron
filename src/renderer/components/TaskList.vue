@@ -2,13 +2,10 @@
   <div class="list-container">
     <div class="list-body">
       <div class="list-header">
-        <h2>{{list.name}}</h2>
+        <h2>{{list}}</h2>
       </div>
       <div class="list-content">
         <div class="list-tasks">
-          <template v-for="task in list.tasks">
-            <task-card  v-bind:task="task" @open-editor="openEditor"></task-card>
-          </template>
         </div>
         <el-button type="danger" size="mini" icon="el-icon-delete" v-on:click="removeList"></el-button>
         <el-button type="default" size="mini" icon="el-icon-plus" v-on:click="addNewTask"></el-button>
@@ -19,14 +16,23 @@
 
 <script>
   import TaskCard from './TaskCard'
-  import EventBus from './../event-bus'
 
   export default{
     name: 'task-list',
     components: { TaskCard },
     props: [
-      'list'
+      'listId'
     ],
+    mounted: function () {
+    },
+    computed: {
+      tasks: function () {
+        this.$store.getters.tasks({})
+      },
+      list: function () {
+        this.$store.getters.list(this.listId)
+      }
+    },
     methods: {
       openEditor: function (task) {
         this.$emit('open-editor', task)
@@ -36,7 +42,7 @@
       },
       removeList: function () {
         if (confirm('Remove task?')) {
-          EventBus.$emit('remove-list', this.list)
+          this.$store.commit('removeList', { id: this.listId })
         }
       }
     }
