@@ -2,12 +2,12 @@
   <div class="list-container">
     <div class="list-body">
       <div class="list-header">
-        <h2>{{list}}</h2>
+        <h2>{{list.name}}</h2>
       </div>
       <div class="list-content">
         <div class="list-tasks">
           <template v-for="taskId in taskIds">
-            <task-card  :taskId="taskId" @open-editor="openEditor"></task-card>
+            <task-card  :taskId="taskId"></task-card>
           </template>
         </div>
         <el-button type="danger" size="mini" icon="el-icon-delete" v-on:click="removeList"></el-button>
@@ -30,18 +30,18 @@
     },
     computed: {
       tasks: function () {
-        this.$store.getters.tasks({})
+        return this.$store.getters.tasks({})
       },
       list: function () {
-        this.$store.getters.list(this.listId)
+        return this.$store.getters.list(this.listId)
       },
       taskIds: function () {
         return this.$store.getters.taskIds(this.listId)
       }
     },
     methods: {
-      openEditor: function (task) {
-        this.$emit('open-editor', task)
+      openEditor: function (taskId) {
+        this.$emit('open-editor', taskId)
       },
       addTask: function () {
         let taskId = (new Date()).getTime().toString()

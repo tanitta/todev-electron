@@ -1,6 +1,7 @@
 <template>
   <div class="main-page">
     <board></board>
+    <task-editor></task-editor>
   </div>
 </template>
 

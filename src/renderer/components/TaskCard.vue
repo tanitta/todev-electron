@@ -9,6 +9,7 @@
 </template>
 
 <script>
+  import EventBus from './../event-bus'
   export default {
     name: 'task-card',
     props: [
@@ -24,7 +25,7 @@
         this.openEditor()
       },
       openEditor: function () {
-        this.$emit('open-editor', this.taskId)
+        EventBus.$emit('open-task-editor', { taskId: this.taskId })
       }
     }
   }

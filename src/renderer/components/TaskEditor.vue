@@ -6,10 +6,10 @@
           <div class="modal-header">
             <slot name="header">
               <template v-if="isChangingName">
-                <input v-model="nameOnForm" @keydown.enter="changeName()" @blur="changeName()" ref="r1" />
+                <input v-model="name" @keydown.enter="changeName()" @blur="changeName()" ref="r1" />
               </template>
               <template v-else="">
-                <span @click="focusName">{{nameOnForm}}</span>
+                <span @click="focusName">{{name}}</span>
               </template>
             </slot>
           </div>
@@ -17,9 +17,9 @@
             <slot name="footer">
               <div>
                 <br>Prevs:</br>
-                <dep-selector :type="'prev'" :event-bus="prevDepEventBus" :dep-ids-init="prevDepIds" :lists="lists" :self-task-id="id"/>
+                <dep-selector :type="'prev'" :event-bus="prevDepEventBus" :dep-ids-init="prevDepIds" :all-task-ids="allTaskIds" :self-task-id="taskId"/>
                 <br>Nexts:</br>
-                <dep-selector :type="'next'" :event-bus="nextDepEventBus" :dep-ids-init="nextDepIds" :lists="lists" :self-task-id="id"/>
+                <dep-selector :type="'next'" :event-bus="nextDepEventBus" :dep-ids-init="nextDepIds" :all-task-ids="allTaskIds" :self-task-id="taskId"/>
                 <br/>
                 Description: {{description}}
               </div>
@@ -48,73 +48,43 @@ export default{
       showEditor: false,
       isChangingName: false,
       targetTasks: [],
-      nameOnForm: '',
       prevDepEventBus: new Vue(),
       nextDepEventBus: new Vue(),
-      lists: []
+      lists: [],
+      taskId: null,
+      prevDepIds: [],
+      nextDepIds: [],
+      description: '',
+      name: ''
     }
   },
   computed: {
-    prevDepIds: {
-      get: function () {
-        return this.targetTasks[0].prevs
-      },
-      set: function (ids) {
-        this.targetTasks[0].prevs = ids
-      }
+    task: function () {
+      return this.$store.getters.task(this.taskId)
     },
-    nextDepIds: {
-      get: function () {
-        return this.targetTasks[0].nexts
-      },
-      set: function (ids) {
-        this.targetTasks[0].nexts = ids
-      }
-    },
-    description: {
-      get: function () {
-        return this.targetTasks[0].description
-      },
-      set: function (str) {
-        this.targetTasks[0].description = str
-      }
-    },
-    name: {
-      get: function () {
-        return this.targetTasks[0].name
-      },
-      set: function (n) {
-        this.targetTasks[0].name = n
-      }
-    },
-    id: {
-      get: function () {
-        return this.targetTasks[0].id
-      }
+    allTaskIds: function () {
+      let ids = this.$store.getters.allTaskIds
+      console.log(ids)
+      return ids
     }
   },
   methods: {
     cancelChangingName: function () {
-      this.nameOnForm = this.name
       this.isChangingName = false
     },
     changeName: function () {
       if (!this.showEditor) return
-      if (this.nameOnForm.length > 0) {
-        this.name = this.nameOnForm
-      } else {
-        this.nameOnForm = 'Enter task name'
+      if (this.name.length === 0) {
         this.name = 'Enter task name'
       }
       this.isChangingName = false
     },
     open: function (payload) {
-      this.targetTasks = payload.selectedTasks
-      this.lists = payload.lists
+      this.taskId = payload.taskId
+      this.name = this.task.name
       this.showEditor = true
       if (payload.isFocus) {
         this.focusName()
-        // this.name = ''
       }
 
       this.prevDepEventBus.$on('setDepsToTask', depIds => {
@@ -125,7 +95,6 @@ export default{
       })
       this.prevDepEventBus.$emit('setDepsToSelector', this.prevDepIds)
       this.nextDepEventBus.$emit('setDepsToSelector', this.nextDepIds)
-      this.nameOnForm = this.name
     },
     focusName: function () {
       this.isChangingName = true
@@ -133,11 +102,12 @@ export default{
     },
     close: function () {
       this.changeName()
+      this.$store.commit('changeTask', {taskId: this.taskId, name: this.name})
       this.isChangingName = false
       this.showEditor = false
     },
     removeTask: function () {
-      EventBus.$emit('remove-task', this.targetTasks[0])
+      this.$store.dispatch('removeTask', {taskId: this.taskId})
       this.isChangingName = false
       this.targetTasks = []
       this.showEditor = false

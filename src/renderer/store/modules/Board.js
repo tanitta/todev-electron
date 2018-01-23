@@ -43,6 +43,10 @@ const mutations = {
     Vue.delete(state.tasks, p.taskId)
   },
   changeTask (state, p) {
+    let id = p.taskId
+    let task = state.tasks[id]
+    if (p.name) task.name = p.name
+    if (p.description) task.description = p.description
   },
   moveTask (state, p) {
   },
@@ -105,6 +109,13 @@ const getters = {
   },
   list: (state) => (listId) => {
     return state.lists[listId]
+  },
+  allTaskIds: (state, getters) => {
+    let taskIds = []
+    for (let listId of getters.listIds) {
+      taskIds = [...taskIds, ...getters.list(listId).taskIds]
+    }
+    return taskIds
   }
 }
 

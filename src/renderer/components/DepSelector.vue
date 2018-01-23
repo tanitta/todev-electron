@@ -32,26 +32,24 @@
     props: [
       'type',
       'event-bus',
-      'lists',
+      'allTaskIds',
       'dep-ids-init',
       'self-task-id'
     ],
     data: function () {
       return {
         options4: [],
+        taskDic: [],
         depIds: [],
         depId: '',
-        list: [],
         loading: false
       }
     },
     mounted: function () {
-      this.list = []
-      for (var l of this.lists) {
-        let list = l.tasks.map(task => {
-          return {id: task.id, label: task.name}
-        })
-        Array.prototype.push.apply(this.list, list)
+      this.taskDic = []
+      for (var taskId of this.allTaskIds) {
+        let item = {id: taskId, label: this.$store.getters.task(taskId).name}
+        Array.prototype.push.apply(this.taskDic, item)
       }
       this.depIds = this.depIdsInit
       // this.depIds = [{value: 0, key: 'hoge'}]
@@ -61,7 +59,7 @@
     },
     methods: {
       depName: function (id) {
-        let filtered = this.list.filter(task => task.id === id)
+        let filtered = this.taskDic.filter(task => task.id === id)
         let name = ''
         if (filtered.length > 0) {
           name = filtered[0].label
@@ -97,7 +95,7 @@
           this.loading = true
           setTimeout(() => {
             this.loading = false
-            this.options4 = this.list.filter(item => {
+            this.options4 = this.taskDic.filter(item => {
               return item.label
                 .indexOf(query) > -1
             }).filter(item => {
@@ -112,7 +110,7 @@
       },
       taskFromId: function (id) {
         let tasks = []
-        for (var l of this.lists) {
+        for (var l of this.taskDics) {
           Array.prototype.push.apply(tasks, l.tasks)
         }
         let tasksMatchedToId = tasks.filter(task => { return task.id === id })

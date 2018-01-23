@@ -2,9 +2,9 @@
   <div class="board">
     <div class="lists">
       <template v-for="listId in listIds">
-        <task-list :listId="listId"></task-list>
+        <task-list :list-id="listId"></task-list>
       </template>
-      <button v-on:click="addList">Add</button>
+      <el-button type="default" size="mini" icon="el-icon-plus" v-on:click="addList"></el-button>
     </div>
   </div>
 </template>
