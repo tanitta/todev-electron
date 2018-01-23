@@ -11,7 +11,7 @@ const state = {
 }
 
 const mutations = {
-  addList (state) {
+  addList (state, p) {
     let id = (new Date()).getTime()
     state.lists = {
       ...state.lists,
@@ -22,11 +22,27 @@ const mutations = {
     }
   },
   removeList (state, p) {
-    Vue.delete(state.lists, p.id)
+    Vue.delete(state.lists, p.listId)
   },
   addTask (state, p) {
+    state.lists[p.listId].taskIds.push(p.taskId)
+    state.tasks = {
+      ...state.tasks,
+      [p.taskId]: {
+        name: 'NewTask',
+        description: '',
+        prevIds: [],
+        nextIds: []
+      }
+    }
   },
   removeTask (state, p) {
+    for (let list of Object.keys(state.lists).map(key => state.lists[key])) {
+      list.taskIds = list.taskIds.filter(id => id !== p.taskId)
+    }
+    Vue.delete(state.tasks, p.taskId)
+  },
+  changeTask (state, p) {
   },
   moveTask (state, p) {
   },
@@ -65,12 +81,24 @@ const mutations = {
 }
 
 const actions = {
+  removeList (context, p) {
+    for (let taskId of context.getters.taskIds(p.listId)) {
+      context.dispatch('removeTask', {taskId: taskId})
+    }
+    context.commit('removeList', p)
+  },
+  removeTask ({commit, dispatch}, p) {
+    commit('removeTask', p)
+  }
 }
 
 const getters = {
-  tasks: state => listId => {
+  taskIds: state => listId => {
     let list = state.lists[listId]
-    return list.taskIds.map(taskId => state.tasks[taskId])
+    return list.taskIds
+  },
+  task: (state) => (taskId) => {
+    return state.tasks[taskId]
   },
   listIds: state => {
     return Object.keys(state.lists)

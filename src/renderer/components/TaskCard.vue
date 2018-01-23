@@ -12,14 +12,19 @@
   export default {
     name: 'task-card',
     props: [
-      'task'
+      'taskId'
     ],
+    computed: {
+      task: function () {
+        return this.$store.getters.task(this.taskId)
+      }
+    },
     methods: {
       onClick: function (event) {
         this.openEditor()
       },
       openEditor: function () {
-        this.$emit('open-editor', this.task)
+        this.$emit('open-editor', this.taskId)
       }
     }
   }

@@ -6,9 +6,12 @@
       </div>
       <div class="list-content">
         <div class="list-tasks">
+          <template v-for="taskId in taskIds">
+            <task-card  :taskId="taskId" @open-editor="openEditor"></task-card>
+          </template>
         </div>
         <el-button type="danger" size="mini" icon="el-icon-delete" v-on:click="removeList"></el-button>
-        <el-button type="default" size="mini" icon="el-icon-plus" v-on:click="addNewTask"></el-button>
+        <el-button type="default" size="mini" icon="el-icon-plus" v-on:click="addTask"></el-button>
       </div>
     </div>
   </div>
@@ -31,18 +34,22 @@
       },
       list: function () {
         this.$store.getters.list(this.listId)
+      },
+      taskIds: function () {
+        return this.$store.getters.taskIds(this.listId)
       }
     },
     methods: {
       openEditor: function (task) {
         this.$emit('open-editor', task)
       },
-      addNewTask: function () {
-        this.$emit('add-new-task', this.list)
+      addTask: function () {
+        let taskId = (new Date()).getTime().toString()
+        this.$store.commit('addTask', { taskId: taskId, listId: this.listId })
       },
       removeList: function () {
         if (confirm('Remove task?')) {
-          this.$store.commit('removeList', { id: this.listId })
+          this.$store.dispatch('removeList', { listId: this.listId })
         }
       }
     }
