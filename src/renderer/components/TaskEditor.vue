@@ -64,7 +64,6 @@ export default{
     },
     allTaskIds: function () {
       let ids = this.$store.getters.allTaskIds
-      console.log(ids)
       return ids
     }
   },
@@ -86,15 +85,17 @@ export default{
       if (payload.isFocus) {
         this.focusName()
       }
+      this.prevDepIds = []
+      this.nextDepIds = []
+      this.prevDepIds = [...this.task.prevIds]
+      this.nextDepIds = [...this.task.nextIds]
 
-      this.prevDepEventBus.$on('setDepsToTask', depIds => {
-        this.prevDepIds = depIds
+      this.prevDepEventBus.$on('addDepsToTask', depId => {
+        this.prevDepIds.push(depId)
       })
-      this.nextDepEventBus.$on('setDepsToTask', depIds => {
-        this.nextDepIds = depIds
+      this.nextDepEventBus.$on('addDepsToTask', depId => {
+        this.nextDepIds.push(depId)
       })
-      this.prevDepEventBus.$emit('setDepsToSelector', this.prevDepIds)
-      this.nextDepEventBus.$emit('setDepsToSelector', this.nextDepIds)
     },
     focusName: function () {
       this.isChangingName = true
@@ -102,9 +103,21 @@ export default{
     },
     close: function () {
       this.changeName()
-      this.$store.commit('changeTask', {taskId: this.taskId, name: this.name})
-      this.isChangingName = false
+
       this.showEditor = false
+
+      this.$store.commit('changeTask', {taskId: this.taskId, name: this.name})
+
+      this.prevDepIds.forEach((prevId) => {
+        this.$store.commit('addDep', {prev: prevId, next: this.taskId})
+      })
+      this.nextDepIds.forEach((nextId) => {
+        this.$store.commit('addDep', {prev: this.taskId, next: nextId})
+      })
+      this.nextDepIds = []
+      this.prevDepIds = []
+
+      this.isChangingName = false
     },
     removeTask: function () {
       this.$store.dispatch('removeTask', {taskId: this.taskId})

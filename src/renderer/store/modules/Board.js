@@ -12,7 +12,7 @@ const state = {
 
 const mutations = {
   addList (state, p) {
-    let id = (new Date()).getTime()
+    let id = (new Date()).getTime().toString()
     state.lists = {
       ...state.lists,
       [id]: {
@@ -47,6 +47,16 @@ const mutations = {
     let task = state.tasks[id]
     if (p.name) task.name = p.name
     if (p.description) task.description = p.description
+  },
+  addDep (state, p) {
+    let prevTask = state.tasks[p.prev]
+    let nextTask = state.tasks[p.next]
+    let noExist = (prevTask.nextIds.indexOf(p.next) === -1) || (nextTask.prevIds.indexOf(p.prev) === -1)
+    if (!noExist) return
+    prevTask.nextIds.push(p.next)
+    nextTask.prevIds.push(p.prev)
+  },
+  removeDep (state, p) {
   },
   moveTask (state, p) {
   },

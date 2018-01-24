@@ -49,13 +49,13 @@
       this.taskDic = []
       for (var taskId of this.allTaskIds) {
         let item = {id: taskId, label: this.$store.getters.task(taskId).name}
-        Array.prototype.push.apply(this.taskDic, item)
+        console.log(item)
+        this.taskDic = [...this.taskDic, item]
       }
       this.depIds = this.depIdsInit
       // this.depIds = [{value: 0, key: 'hoge'}]
     },
     updated: function () {
-      this.eventBus.$emit('setDepsToTask', this.depIds)
     },
     methods: {
       depName: function (id) {
@@ -80,14 +80,7 @@
       addNewDep: function () {
         if (this.depId.length === 0) { return }
         this.depIds.push(this.depId)
-        let depTargetTask = this.taskFromId(this.depId)
-        if (this.type === 'prev') {
-          depTargetTask.nexts.push(this.selfTaskId)
-        }
-        if (this.type === 'next') {
-          depTargetTask.prevs.push(this.selfTaskId)
-        }
-
+        this.eventBus.$emit('setDepsToTask', this.depIds)
         this.depId = ''
       },
       remoteMethod: function (query) {
@@ -95,6 +88,7 @@
           this.loading = true
           setTimeout(() => {
             this.loading = false
+            console.log(this.taskDic)
             this.options4 = this.taskDic.filter(item => {
               return item.label
                 .indexOf(query) > -1
@@ -109,13 +103,7 @@
         }
       },
       taskFromId: function (id) {
-        let tasks = []
-        for (var l of this.taskDics) {
-          Array.prototype.push.apply(tasks, l.tasks)
-        }
-        let tasksMatchedToId = tasks.filter(task => { return task.id === id })
-        console.assert(tasksMatchedToId.length === 1)
-        return tasksMatchedToId[0]
+        return this.$store.getters.task(id)
       }
 
     }
