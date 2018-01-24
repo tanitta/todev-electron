@@ -69,20 +69,12 @@
       },
       removeDep: function (id) {
         this.depIds = this.depIds.filter(depId => depId !== id)
-
         this.eventBus.$emit('removeDepsToTask', id)
-        // let depTargetTask = this.taskFromId(id)
-        if (this.type === 'prev') {
-          // depTargetTask.nexts = depTargetTask.nexts.filter(depId => depId !== this.selfTaskId)
-        }
-        if (this.type === 'next') {
-          // depTargetTask.prevs = depTargetTask.prevs.filter(depId => depId !== this.selfTaskId)
-        }
       },
       addNewDep: function () {
         if (this.depId.length === 0) { return }
         this.eventBus.$emit('addDepsToTask', this.depId)
-        this.depIds = []
+        this.depIds.push(this.depId)
         this.depId = ''
       },
       remoteMethod: function (query) {
