@@ -19,6 +19,7 @@
 
 <script>
   import TaskCard from './TaskCard'
+  import EventBus from './../event-bus'
 
   export default{
     name: 'task-list',
@@ -46,6 +47,7 @@
       addTask: function () {
         let taskId = (new Date()).getTime().toString()
         this.$store.commit('addTask', { taskId: taskId, listId: this.listId })
+        EventBus.$emit('open-task-editor', { taskId: taskId, isFocus: true })
       },
       removeList: function () {
         if (confirm('Remove task?')) {
