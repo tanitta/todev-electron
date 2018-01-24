@@ -5,11 +5,11 @@
         <div class="modal-container">
           <div class="modal-header">
             <slot name="header">
+              <h2>Name:</h2>
               <template v-if="isChangingName">
                 <input v-model="name" @keydown.enter="changeName()" @blur="changeName()" ref="r1" />
               </template>
               <template v-else="">
-                <h2>Name:</h2>
                 <span @click="focusName">{{name}}</span>
               </template>
             </slot>
