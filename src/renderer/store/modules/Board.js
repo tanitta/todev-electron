@@ -105,8 +105,15 @@ const actions = {
     }
     context.commit('removeList', p)
   },
-  removeTask ({commit, dispatch}, p) {
-    commit('removeTask', p)
+  removeTask (context, p) {
+    let task = context.getters.task(p.taskId)
+    for (let prevId of task.prevIds) {
+      context.commit('removeDep', {prev: prevId, next: p.taskId})
+    }
+    for (let nextId of task.nextIds) {
+      context.commit('removeDep', {prev: p.taskId, next: nextId})
+    }
+    context.commit('removeTask', p)
   }
 }
 

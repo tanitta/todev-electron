@@ -63,7 +63,9 @@
     },
     methods: {
       depName: function (id) {
+        console.log('depName_id', id)
         let task = this.$store.getters.task(id)
+        console.log('depName_task', task)
         let name = task.name
         return name
       },
