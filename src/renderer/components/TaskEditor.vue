@@ -9,6 +9,7 @@
                 <input v-model="name" @keydown.enter="changeName()" @blur="changeName()" ref="r1" />
               </template>
               <template v-else="">
+                <h2>Name:</h2>
                 <span @click="focusName">{{name}}</span>
               </template>
             </slot>
@@ -16,12 +17,13 @@
           <div class="modal-footer">
             <slot name="footer">
               <div>
-                <br>Prevs:</br>
+                <h2>Prevs:</h2>
                 <dep-selector :type="'prev'" :event-bus="prevDepEventBus" :dep-ids-init="prevDepIds" :all-task-ids="allTaskIds" :self-task-id="taskId"/>
-                <br>Nexts:</br>
+                <h2>Nexts:</h2>
                 <dep-selector :type="'next'" :event-bus="nextDepEventBus" :dep-ids-init="nextDepIds" :all-task-ids="allTaskIds" :self-task-id="taskId"/>
                 <br/>
-                Description: {{description}}
+                <h2>Description:</h2>
+                {{description}}
               </div>
               <div>
                 <el-button type="danger" size="mini" icon="el-icon-delete" v-on:click="removeTask"></el-button>

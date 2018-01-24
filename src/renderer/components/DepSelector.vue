@@ -1,11 +1,17 @@
 <template>
   <div>
-    <template v-for="item in depIds">
-      <div>
-        {{depName(item)}}
-        <el-button type="danger" size="mini" icon="el-icon-delete" v-on:click="removeDep(item)"></el-button>
-      </div>             
-    </template>
+    <div class="dep-list">
+      <template v-for="item in depIds">
+        <div class="dep-container " >
+          <div class="item1">
+            {{depName(item)}}
+          </div>
+          <div class="item2">
+            <el-button type="danger" size="mini" icon="el-icon-delete" v-on:click="removeDep(item)"></el-button>
+          </div>
+        </div>             
+      </template>
+    </div>
     <el-select
       v-model="depId"
       filterable
@@ -100,4 +106,14 @@
 </script>
 
 <style>
+  .dep-container {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    flex-direction: row;
+  }
+  .dep-list{
+  }
 </style>
