@@ -2,10 +2,10 @@
   <div class="dep-tree">
     <canvas id="dep-tree-canvas" width=500 height=1000></canvas>
     <section id="tree-container">
-      <template v-for="task in depSort()">
-        <div :ref="'t'+task.id" class="task-container">
+      <template v-for="taskId in depSort()">
+        <div :ref="'t'+taskId" class="task-container">
           <div class="task-name">
-            {{task.name}}
+            {{task(taskId).name}}
           </div>
         </div>
       </template>
@@ -17,17 +17,26 @@
   import TopSort from 'topological-sort'
   export default{
     name: 'dep-tree',
-    props: [
-      'board'
-    ],
+    computed: {
+      tasks: function () {
+        return this.$store.getters.allTaskIds.map(id => this.$store.getters.task(id))
+      },
+      allTaskIds: function () {
+        return this.$store.getters.allTaskIds
+      }
+    },
     methods: {
+      task: function (id) {
+        return this.$store.getters.task(id)
+      },
       depSort: function () {
         let sortOp = new TopSort(new Map())
         let edges = []
-        for (let task of this.tasks()) {
-          sortOp.addNode(task.id, task)
-          task.nexts.forEach(nextTaskId => {
-            edges.push({from: task.id, to: nextTaskId})
+        for (let taskId of this.allTaskIds) {
+          sortOp.addNode(taskId, taskId)
+          this.task(taskId).nextIds.forEach(nextTaskId => {
+            let edge = {from: taskId, to: nextTaskId}
+            edges.push(edge)
           })
         }
         edges.forEach(edge => {
@@ -100,34 +109,26 @@
           ctx.stroke()
         })
 
-        this.tasks().forEach((task) => {
-          let taskRect = this.$refs['t' + task.id][0].getBoundingClientRect()
-          let numNexts = task.nexts.length
-          let center = {
-            x: offset,
-            y: taskRect.top - canvasPos.top + taskRect.height / 2
-          }
+        this.allTaskIds.forEach((taskId) => {
+          let task = this.task(taskId)
+          if (this.$refs['t' + taskId]) {
+            let taskRect = this.$refs['t' + taskId][0].getBoundingClientRect()
+            let numNexts = task.nextIds.length
+            let center = {
+              x: offset,
+              y: taskRect.top - canvasPos.top + taskRect.height / 2
+            }
 
-          if (task.prevs.length === 0) {
-            ctx.fillStyle = 'hsl(100, 80%, 70%)'
-          } else {
-            ctx.fillStyle = 'rgb(230, 230, 230)'
+            if (task.prevIds.length === 0) {
+              ctx.fillStyle = 'hsl(100, 80%, 70%)'
+            } else {
+              ctx.fillStyle = 'rgb(230, 230, 230)'
+            }
+            ctx.beginPath()
+            ctx.arc(center.x, center.y, radius + numNexts * 2, 0, Math.PI * 2, true)
+            ctx.fill()
           }
-          ctx.beginPath()
-          ctx.arc(center.x, center.y, radius + numNexts * 2, 0, Math.PI * 2, true)
-          ctx.fill()
         })
-      },
-      tasks: function () {
-        let tasks = []
-        for (var l of this.board.lists) {
-          Array.prototype.push.apply(tasks, l.tasks)
-        }
-        return tasks
-      },
-      depTaskFromId: function (id) {
-        let tasksMatchedToId = this.tasks().filter(task => { return task.id === id })
-        return tasksMatchedToId[0]
       }
     }
   }

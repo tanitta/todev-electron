@@ -1,6 +1,7 @@
 <template>
   <div class="main-page">
     <board></board>
+    <dep-tree/>
     <task-editor></task-editor>
   </div>
 </template>
@@ -30,5 +31,11 @@
     color: #DDDDDD;
     top: 0;
     height: 100vh;
+    width: 100vw;
+
+    display:flex;
+    flex-direction: row;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
   }
 </style>

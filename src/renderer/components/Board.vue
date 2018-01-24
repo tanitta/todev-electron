@@ -40,7 +40,10 @@
 body { font-family: 'Source Sans Pro', sans-serif; }
 
 .board{
+  position:relative;
+  flex: 0 1 auto;
   height: 100%;
+  width: 60%;
   display:flex;
   flex-direction: row;
   -webkit-box-orient: vertical;

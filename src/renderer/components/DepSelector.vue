@@ -51,11 +51,7 @@
         let item = {id: taskId, label: this.$store.getters.task(taskId).name}
         this.taskDic = [...this.taskDic, item]
       }
-      // for (let id of this.depIdsInit) {
-      //   this.depIds.push(id)
-      // }
       this.depIds = this.depIdsInit
-      // this.depIds = [{value: 0, key: 'hoge'}]
     },
     updated: function () {
     },
