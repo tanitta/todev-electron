@@ -1,6 +1,8 @@
 <template>
-  <div class="task-name" v-on:click="onClick">
-    {{task.name}}
+  <div  class="dep-tree-card" v-on:click="onClick">
+    <div class="text-area">
+      {{task.name}}
+    </div>
   </div>
 </template>
 
@@ -25,7 +27,13 @@
 </script>
 
 <style>
-  .task-name {
+  .dep-tree-card{
+    background-color: rgba(240, 240, 240, 0.3);
+  }
+  .dep-tree-card:hover{
+    background-color: rgba(240, 240, 240, 0.5);
+  }
+  .text-area {
     color: #AAAAAA;
     margin-left:100px;
     margin-top: 10px;

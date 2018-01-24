@@ -3,8 +3,8 @@
     <canvas id="dep-tree-canvas" width=500 height=1000></canvas>
     <section id="tree-container">
       <template v-for="taskId in depSort()">
-        <div :ref="'t'+taskId" class="task-container">
-          <dep-tree-card :taskId="taskId"/>
+        <div :ref="'t'+taskId">
+        <dep-tree-card :taskId="taskId"/>
         </div>
       </template>
     </section>
@@ -151,9 +151,5 @@
     position: relative;
     top: 0;
     left: 0;
-  }
-
-  .task-container{
-    background-color: rgba(240, 240, 240, 0.3);
   }
 </style>
