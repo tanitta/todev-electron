@@ -23,6 +23,7 @@
                 <dep-selector :type="'next'" :event-bus="nextDepEventBus" :dep-ids-init="nextDepIds" :all-task-ids="allTaskIds" :self-task-id="taskId"/>
                 <br/>
                 <h2>Description:</h2>
+                <markdown-editor/>
                 {{description}}
               </div>
               <div>
@@ -40,11 +41,12 @@
 <script>
 import EventBus from './../event-bus'
 import DepSelector from './DepSelector'
+import MarkdownEditor from './MarkdownEditor'
 import Vue from 'vue'
 
 export default{
   name: 'task-editor',
-  components: { DepSelector },
+  components: { DepSelector, MarkdownEditor },
   data: function () {
     return {
       showEditor: false,
@@ -161,7 +163,7 @@ export default{
 }
 
 .modal-container {
-  width: 300px;
+  width: 30%;
   margin: 0px auto;
   padding: 20px 30px;
   background-color: #fff;
