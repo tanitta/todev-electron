@@ -4,9 +4,7 @@
     <section id="tree-container">
       <template v-for="taskId in depSort()">
         <div :ref="'t'+taskId" class="task-container">
-          <div class="task-name">
-            {{task(taskId).name}}
-          </div>
+          <dep-tree-card :taskId="taskId"/>
         </div>
       </template>
     </section>
@@ -15,8 +13,10 @@
 
 <script>
   import TopSort from 'topological-sort'
+  import DepTreeCard from './DepTreeCard'
   export default{
     name: 'dep-tree',
+    components: { DepTreeCard },
     computed: {
       tasks: function () {
         return this.$store.getters.allTaskIds.map(id => this.$store.getters.task(id))
@@ -153,13 +153,6 @@
     left: 0;
   }
 
-  .task-name {
-    color: #AAAAAA;
-    margin-left:100px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding:6px;
-  }
   .task-container{
     background-color: rgba(240, 240, 240, 0.3);
   }
