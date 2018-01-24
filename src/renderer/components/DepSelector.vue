@@ -1,9 +1,9 @@
 <template>
   <div>
-    <template v-for="depId in depIds">
+    <template v-for="item in depIds">
       <div>
-        {{depName(depId)}}
-        <el-button type="danger" size="mini" icon="el-icon-delete" v-on:click="removeDep(depId)"></el-button>
+        {{depName(item)}}
+        <el-button type="danger" size="mini" icon="el-icon-delete" v-on:click="removeDep(item)"></el-button>
       </div>             
     </template>
     <el-select
@@ -49,38 +49,40 @@
       this.taskDic = []
       for (var taskId of this.allTaskIds) {
         let item = {id: taskId, label: this.$store.getters.task(taskId).name}
-        console.log(item)
         this.taskDic = [...this.taskDic, item]
       }
+      // for (let id of this.depIdsInit) {
+      //   this.depIds.push(id)
+      // }
       this.depIds = this.depIdsInit
       // this.depIds = [{value: 0, key: 'hoge'}]
     },
     updated: function () {
     },
+    computed: {
+    },
     methods: {
       depName: function (id) {
-        let filtered = this.taskDic.filter(task => task.id === id)
-        let name = ''
-        if (filtered.length > 0) {
-          name = filtered[0].label
-        }
+        let task = this.$store.getters.task(id)
+        let name = task.name
         return name
       },
       removeDep: function (id) {
         this.depIds = this.depIds.filter(depId => depId !== id)
 
-        let depTargetTask = this.taskFromId(id)
+        this.eventBus.$emit('removeDepsToTask', id)
+        // let depTargetTask = this.taskFromId(id)
         if (this.type === 'prev') {
-          depTargetTask.nexts = depTargetTask.nexts.filter(depId => depId !== this.selfTaskId)
+          // depTargetTask.nexts = depTargetTask.nexts.filter(depId => depId !== this.selfTaskId)
         }
         if (this.type === 'next') {
-          depTargetTask.prevs = depTargetTask.prevs.filter(depId => depId !== this.selfTaskId)
+          // depTargetTask.prevs = depTargetTask.prevs.filter(depId => depId !== this.selfTaskId)
         }
       },
       addNewDep: function () {
         if (this.depId.length === 0) { return }
-        this.depIds.push(this.depId)
-        this.eventBus.$emit('setDepsToTask', this.depIds)
+        this.eventBus.$emit('addDepsToTask', this.depId)
+        this.depIds = []
         this.depId = ''
       },
       remoteMethod: function (query) {
@@ -88,7 +90,6 @@
           this.loading = true
           setTimeout(() => {
             this.loading = false
-            console.log(this.taskDic)
             this.options4 = this.taskDic.filter(item => {
               return item.label
                 .indexOf(query) > -1

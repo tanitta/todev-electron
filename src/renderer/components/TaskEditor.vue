@@ -81,21 +81,33 @@ export default{
     open: function (payload) {
       this.taskId = payload.taskId
       this.name = this.task.name
-      this.showEditor = true
       if (payload.isFocus) {
         this.focusName()
       }
       this.prevDepIds = []
       this.nextDepIds = []
-      this.prevDepIds = [...this.task.prevIds]
-      this.nextDepIds = [...this.task.nextIds]
+      for (let id of this.task.prevIds) {
+        this.prevDepIds.push(id)
+      }
+      for (let id of this.task.nextIds) {
+        this.nextDepIds.push(id)
+      }
 
       this.prevDepEventBus.$on('addDepsToTask', depId => {
-        this.prevDepIds.push(depId)
+        this.$store.commit('addDep', {prev: depId, next: this.taskId})
       })
       this.nextDepEventBus.$on('addDepsToTask', depId => {
-        this.nextDepIds.push(depId)
+        this.$store.commit('addDep', {prev: this.taskId, next: depId})
       })
+
+      this.prevDepEventBus.$on('removeDepsToTask', depId => {
+        this.$store.commit('removeDep', {prev: depId, next: this.taskId})
+      })
+      this.nextDepEventBus.$on('removeDepsToTask', depId => {
+        this.$store.commit('removeDep', {prev: this.taskId, next: depId})
+      })
+
+      this.showEditor = true
     },
     focusName: function () {
       this.isChangingName = true
@@ -107,15 +119,6 @@ export default{
       this.showEditor = false
 
       this.$store.commit('changeTask', {taskId: this.taskId, name: this.name})
-
-      this.prevDepIds.forEach((prevId) => {
-        this.$store.commit('addDep', {prev: prevId, next: this.taskId})
-      })
-      this.nextDepIds.forEach((nextId) => {
-        this.$store.commit('addDep', {prev: this.taskId, next: nextId})
-      })
-      this.nextDepIds = []
-      this.prevDepIds = []
 
       this.isChangingName = false
     },

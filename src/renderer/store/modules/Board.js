@@ -57,6 +57,10 @@ const mutations = {
     nextTask.prevIds.push(p.prev)
   },
   removeDep (state, p) {
+    let prevTask = state.tasks[p.prev]
+    let nextTask = state.tasks[p.next]
+    prevTask.nextIds = prevTask.nextIds.filter(id => id !== p.next)
+    nextTask.prevIds = nextTask.prevIds.filter(id => id !== p.prev)
   },
   moveTask (state, p) {
   },
@@ -113,6 +117,12 @@ const getters = {
   },
   task: (state) => (taskId) => {
     return state.tasks[taskId]
+  },
+  taskDepPrevIds: (state) => (taskId) => {
+    return state.tasks[taskId].prevIds
+  },
+  taskDepNextIds: (state) => (taskId) => {
+    return state.tasks[taskId].nextIds
   },
   listIds: state => {
     return Object.keys(state.lists)
