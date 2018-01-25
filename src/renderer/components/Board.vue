@@ -42,13 +42,14 @@ body { font-family: 'Source Sans Pro', sans-serif; }
 .board{
   position:relative;
   flex: 0 1 auto;
-  height: 100%;
   width: 60%;
   display:flex;
   flex-direction: row;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
 
+  padding-top: 30px;
+  padding-bottom: 30px;
 }
 .lists{
   flex: 0 1 auto;
