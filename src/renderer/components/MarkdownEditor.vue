@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="markdown-editor">
     <template v-if="isEditing">
       <textarea :value="text" @keydown.esc="update()" @blur="update()" ref="markdowneditor" />
     </template>
@@ -43,13 +43,18 @@ export default{
 </script>
 
 <style>
-textarea {
-  width: 100%;
-  height: 100%;
-}
-.html-box{
-  background-color: rgba(240, 240, 240, 0.3);
-  color: #AAAAAA;
-  padding:10px;
-}
+  .markdown-editor{
+    width: 100%;
+    height: 100%;
+  }
+  textarea {
+    width: 100%;
+    height: 100%;
+  }
+  .html-box{
+    width: 100%;
+    height: 100%;
+    background-color: rgba(240, 240, 240, 0.3);
+    color: #AAAAAA;
+  }
 </style>

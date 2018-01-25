@@ -3,34 +3,40 @@
     <div class="modal-mask" v-if="showEditor">
       <div class="modal-wrapper">
         <div class="modal-container">
-          <div class="modal-header">
-            <slot name="header">
-              <h2>Name:</h2>
-              <template v-if="isChangingName">
-                <input v-model="name" @keydown.enter="changeName()" @blur="changeName()" ref="r1" />
-              </template>
-              <template v-else="">
-                <span @click="focusName">{{name}}</span>
-              </template>
-            </slot>
-          </div>
-          <div class="modal-footer">
-            <slot name="footer">
-              <div>
-                <h2>Prevs:</h2>
-                <dep-selector :type="'prev'" :event-bus="prevDepEventBus" :dep-ids-init="prevDepIds" :all-task-ids="allTaskIds" :self-task-id="taskId"/>
-                <h2>Nexts:</h2>
-                <dep-selector :type="'next'" :event-bus="nextDepEventBus" :dep-ids-init="nextDepIds" :all-task-ids="allTaskIds" :self-task-id="taskId"/>
-                <br/>
-                <h2>Description:</h2>
-                <markdown-editor/>
-                {{description}}
+          <div class="two-columns">
+            <div class="left-column">
+              <div class="modal-header">
+                <slot name="header">
+                  <h2>Name:</h2>
+                  <template v-if="isChangingName">
+                    <input v-model="name" @keydown.enter="changeName()" @blur="changeName()" ref="r1" />
+                  </template>
+                  <template v-else="">
+                    <span @click="focusName">{{name}}</span>
+                  </template>
+                </slot>
               </div>
-              <div>
-                <el-button type="danger" size="mini" icon="el-icon-delete" v-on:click="removeTask"></el-button>
-                <el-button type="default" size="mini" icon="el-icon-close" v-on:click="close"></el-button>
+              <div class="modal-footer">
+                <slot name="footer">
+                  <div>
+                    <h2>Prevs:</h2>
+                    <dep-selector :type="'prev'" :event-bus="prevDepEventBus" :dep-ids-init="prevDepIds" :all-task-ids="allTaskIds" :self-task-id="taskId"/>
+                    <h2>Nexts:</h2>
+                    <dep-selector :type="'next'" :event-bus="nextDepEventBus" :dep-ids-init="nextDepIds" :all-task-ids="allTaskIds" :self-task-id="taskId"/>
+                    <br/>
+                  </div>
+                  <div>
+                    <el-button type="danger" size="mini" icon="el-icon-delete" v-on:click="removeTask"></el-button>
+                    <el-button type="default" size="mini" icon="el-icon-close" v-on:click="close"></el-button>
+                  </div>
+                </slot>
               </div>
-            </slot>
+            </div>
+            <div class="right-column">
+              <h2>Description:</h2>
+              <markdown-editor/>
+              {{description}}
+            </div>
           </div>
         </div>
       </div>
@@ -163,9 +169,9 @@ export default{
 }
 
 .modal-container {
-  width: 30%;
+  width: 40%;
   margin: 0px auto;
-  padding: 20px 30px;
+  padding: 30px 30px;
   background-color: #fff;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
@@ -210,5 +216,22 @@ button, input, select, textarea {
 .modal-leave-active .modal-container {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
+}
+.two-columns{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.left-column{
+    width: 50%;
+    padding: 20px;
+}
+
+.right-column{
+    width: 50%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
 </style>
