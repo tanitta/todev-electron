@@ -35,8 +35,7 @@ export default{
       }
     },
     compiledMarkdown: function () {
-      let html = marked(this.text, { gfm: true, sanitize: true })
-      return html
+      return marked(this.text, { gfm: true, sanitize: true })
     }
   },
   methods: {
