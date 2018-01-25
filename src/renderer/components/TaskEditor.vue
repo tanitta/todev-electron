@@ -236,6 +236,6 @@ button, input, select, textarea {
     padding: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: flex-start;
 }
 </style>

@@ -4,8 +4,10 @@
       <textarea :value="text" @keydown.esc="update()" @blur="update()" ref="markdowneditor" />
     </template>
     <template v-else="">
-      <div class="html-box" @click="focusName" >
-        <div v-html="compiledMarkdown"></div>
+      <div class="html-box" @click="focusName">
+        <div class="html-scrolled">
+          <div v-html="compiledMarkdown"></div>
+        </div>
       </div>
     </template>
   </div>
@@ -68,17 +70,21 @@ export default{
 <style>
   .markdown-editor{
     width: 100%;
-    height: 100%;
   }
   textarea {
     width: 100%;
-    height: 100%;
+    height: 50vh;
   }
   .html-box{
-    padding:10px;
+    overflow-y: auto;
     width: 100%;
-    height: 100%;
+    min-height: 10vh;
+    max-height: 50vh;
     background-color: rgba(240, 240, 240, 0.3);
+  }
+  .html-scrolled{
+    overflow-wrap : break-word;
+    padding: 10px;
     color: #AAAAAA;
   }
 </style>
