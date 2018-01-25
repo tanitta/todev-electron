@@ -48,6 +48,11 @@ const mutations = {
     if (p.name) task.name = p.name
     if (p.description) task.description = p.description
   },
+  changeDescription (state, p) {
+    let id = p.taskId
+    let task = state.tasks[id]
+    task.description = p.description
+  },
   addDep (state, p) {
     let prevTask = state.tasks[p.prev]
     let nextTask = state.tasks[p.next]

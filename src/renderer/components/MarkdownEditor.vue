@@ -16,14 +16,24 @@ import marked from 'marked'
 export default{
 
   name: 'markdown-editor',
-  components: {},
+  props: [
+    'event-bus',
+    'text-input'
+  ],
   data: function () {
     return {
-      isEditing: false,
-      text: ''
+      isEditing: false
     }
   },
   computed: {
+    text: {
+      get: function () {
+        return this.textInput
+      },
+      set: function (t) {
+        this.eventBus.$emit('change', t)
+      }
+    },
     compiledMarkdown: function () {
       let html = marked(this.text, { gfm: true, sanitize: true })
       return html

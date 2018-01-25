@@ -34,7 +34,7 @@
             </div>
             <div class="right-column">
               <h2>Description:</h2>
-              <markdown-editor/>
+              <markdown-editor :text-input="task.description" :event-bus="descriptionEventBus"/>
               {{description}}
             </div>
           </div>
@@ -60,6 +60,7 @@ export default{
       targetTasks: [],
       prevDepEventBus: new Vue(),
       nextDepEventBus: new Vue(),
+      descriptionEventBus: new Vue(),
       lists: [],
       taskId: null,
       prevDepIds: [],
@@ -146,6 +147,9 @@ export default{
     })
     this.nextDepEventBus.$on('removeDepsToTask', depId => {
       this.$store.commit('removeDep', {prev: this.taskId, next: depId})
+    })
+    this.descriptionEventBus.$on('change', text => {
+      this.$store.commit('changeDescription', {taskId: this.taskId, description: text})
     })
   }
 }
