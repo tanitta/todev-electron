@@ -103,20 +103,6 @@ export default{
         this.nextDepIds.push(id)
       }
 
-      this.prevDepEventBus.$on('addDepsToTask', depId => {
-        this.$store.commit('addDep', {prev: depId, next: this.taskId})
-      })
-      this.nextDepEventBus.$on('addDepsToTask', depId => {
-        this.$store.commit('addDep', {prev: this.taskId, next: depId})
-      })
-
-      this.prevDepEventBus.$on('removeDepsToTask', depId => {
-        this.$store.commit('removeDep', {prev: depId, next: this.taskId})
-      })
-      this.nextDepEventBus.$on('removeDepsToTask', depId => {
-        this.$store.commit('removeDep', {prev: this.taskId, next: depId})
-      })
-
       this.showEditor = true
     },
     focusName: function () {
@@ -147,6 +133,20 @@ export default{
   mounted: function () {
     EventBus.$on('open-task-editor', this.open)
     document.addEventListener('keyup', this.escapeKeyListener)
+
+    this.prevDepEventBus.$on('addDepsToTask', depId => {
+      this.$store.commit('addDep', {prev: depId, next: this.taskId})
+    })
+    this.nextDepEventBus.$on('addDepsToTask', depId => {
+      this.$store.commit('addDep', {prev: this.taskId, next: depId})
+    })
+
+    this.prevDepEventBus.$on('removeDepsToTask', depId => {
+      this.$store.commit('removeDep', {prev: depId, next: this.taskId})
+    })
+    this.nextDepEventBus.$on('removeDepsToTask', depId => {
+      this.$store.commit('removeDep', {prev: this.taskId, next: depId})
+    })
   }
 }
 </script>
