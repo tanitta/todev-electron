@@ -2,8 +2,11 @@ import FileSystem from 'fs'
 import Vue from 'vue'
 import Path from 'path'
 import Mkdirp from 'mkdirp'
+import Migrators from '../helpers/migrators'
+import Semver from 'semver'
 
 const state = {
+  version: '0.0.0',
   name: 'BoardName',
   lists: {},
   tasks: {},
@@ -32,7 +35,8 @@ const mutations = {
         name: 'NewTask',
         description: '',
         prevIds: [],
-        nextIds: []
+        nextIds: [],
+        isArchived: false
       }
     }
   },
@@ -82,24 +86,40 @@ const mutations = {
     if (!check(boardFilePath)) {
       Mkdirp.sync(Path.dirname(boardFilePath))
       let board = {
+        version: '0.0.0',
         name: 'BoardName',
         lists: {},
-        tasks: {},
-        deps: {}
+        tasks: {}
       }
       FileSystem.writeFileSync(boardFilePath, JSON.stringify(board))
     }
     let jsonString = FileSystem.readFileSync(boardFilePath, 'utf8')
     let board = JSON.parse(jsonString)
+    state.version = board.version
     state.name = board.name
     state.lists = board.lists
     state.tasks = board.tasks
     state.deps = board.deps
   },
   saveBoard (state) {
-    let jsonString = JSON.stringify(state)
+    let jsonString = JSON.stringify(state, undefined, 2)
     let boardFilePath = process.cwd() + '/.todev/board.json'
     FileSystem.writeFileSync(boardFilePath, jsonString)
+  },
+  mightMigrate (state) {
+    let latestVersion = Migrators[Migrators.length - 1].version
+    let isLatest = Semver.eq(state.version, latestVersion)
+    if (isLatest) { return }
+
+    let updatedVersionIndex = Migrators.findIndex((element, index, array) => { return Semver.gt(element.version, state.version) })
+    console.log(updatedVersionIndex)
+    if (updatedVersionIndex === -1) {
+      updatedVersionIndex = 0
+    }
+    for (var currentMigratorIndex = updatedVersionIndex; currentMigratorIndex < Migrators.length; ++currentMigratorIndex) {
+      console.log(Migrators[currentMigratorIndex].version)
+      Migrators[currentMigratorIndex].migrate(state)
+    }
   }
 }
 
@@ -119,6 +139,10 @@ const actions = {
       context.commit('removeDep', {prev: p.taskId, next: nextId})
     }
     context.commit('removeTask', p)
+  },
+  loadBoard (context) {
+    context.commit('loadBoard')
+    context.commit('mightMigrate')
   }
 }
 

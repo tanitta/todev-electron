@@ -14,7 +14,7 @@
     name: 'main-page',
     components: { Board, TaskEditor, DepTree },
     mounted: function () {
-      this.$store.commit('loadBoard')
+      this.$store.dispatch('loadBoard')
       this.$store.subscribe((mutation, state) => {
         if (mutation.type === 'saveBoard') return
         this.$store.commit('saveBoard')
