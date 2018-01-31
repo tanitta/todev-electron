@@ -13,6 +13,7 @@
       </template>
     </div>
     <el-select
+      size="mini"
       v-model="depId"
       filterable
       remote

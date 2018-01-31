@@ -50,7 +50,7 @@
         EventBus.$emit('open-task-editor', { taskId: taskId, isFocus: true })
       },
       removeList: function () {
-        if (confirm('Remove task?')) {
+        if (confirm('Remove list?')) {
           this.$store.dispatch('removeList', { listId: this.listId })
         }
       }

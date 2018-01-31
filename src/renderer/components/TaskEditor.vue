@@ -26,8 +26,14 @@
                     <br/>
                   </div>
                   <div>
-                    <el-button type="danger" size="mini" icon="el-icon-delete" v-on:click="removeTask"></el-button>
                     <el-button type="default" size="mini" icon="el-icon-close" v-on:click="close"></el-button>
+                    <template v-if="task.isArchived">
+                      <el-button size="mini" v-on:click="isArchived = false">Unarchive</el-button>
+                      <el-button type="danger" size="mini" icon="el-icon-delete" v-on:click="removeTask"></el-button>
+                    </template>
+                    <template v-else="">
+                      <el-button size="mini" v-on:click="isArchived = true">Archive</el-button>
+                    </template>
                   </div>
                 </slot>
               </div>
@@ -76,6 +82,14 @@ export default{
     allTaskIds: function () {
       let ids = this.$store.getters.allTaskIds
       return ids
+    },
+    isArchived: {
+      get: function () {
+        return this.task.isArchived
+      },
+      set: function (f) {
+        this.$store.commit('changeTask', {taskId: this.taskId, isArchived: f})
+      }
     }
   },
   methods: {
@@ -120,10 +134,12 @@ export default{
       this.isChangingName = false
     },
     removeTask: function () {
-      this.$store.dispatch('removeTask', {taskId: this.taskId})
-      this.isChangingName = false
-      this.targetTasks = []
-      this.showEditor = false
+      if (confirm('Remove task?')) {
+        this.$store.dispatch('removeTask', {taskId: this.taskId})
+        this.isChangingName = false
+        this.targetTasks = []
+        this.showEditor = false
+      }
     },
     escapeKeyListener: function () {
       if (event.keyCode === 27 && this.showEditor) {

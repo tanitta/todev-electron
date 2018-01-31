@@ -25,11 +25,18 @@
         return this.$store.getters.allTaskIds
       }
     },
+    mounted: function () {
+      this.$store.subscribe((mutation, state) => {
+        if (mutation.type === 'saveBoard') return
+        this.depSort()
+      })
+    },
     methods: {
       task: function (id) {
         return this.$store.getters.task(id)
       },
       depSort: function () {
+        console.log(this.$store)
         let sortOp = new TopSort(new Map())
         let edges = []
         for (let taskId of this.allTaskIds) {
@@ -119,14 +126,29 @@
               y: taskRect.top - canvasPos.top + taskRect.height / 2
             }
 
-            if (task.prevIds.length === 0) {
-              ctx.fillStyle = 'hsl(100, 80%, 70%)'
+            let numPrevNoArchivedTasks = task.prevIds.map(id => this.task(id)).filter(task => !task.isArchived).length
+            if (task.isArchived) {
+              let size = 8
+              ctx.fillStyle = 'rgb(250, 250, 250)'
+              ctx.lineWidth = 5
+              ctx.beginPath()
+              ctx.moveTo(center.x + size, center.y + size)
+              ctx.lineTo(center.x - size, center.y - size)
+              ctx.stroke()
+              ctx.beginPath()
+              ctx.moveTo(center.x - size, center.y + size)
+              ctx.lineTo(center.x + size, center.y - size)
+              ctx.stroke()
             } else {
-              ctx.fillStyle = 'rgb(230, 230, 230)'
+              if (numPrevNoArchivedTasks === 0) {
+                ctx.fillStyle = 'hsl(100, 80%, 70%)'
+              } else {
+                ctx.fillStyle = 'rgb(200, 200, 200)'
+              }
+              ctx.beginPath()
+              ctx.arc(center.x, center.y, radius + numNexts * 2, 0, Math.PI * 2, true)
+              ctx.fill()
             }
-            ctx.beginPath()
-            ctx.arc(center.x, center.y, radius + numNexts * 2, 0, Math.PI * 2, true)
-            ctx.fill()
           }
         })
       }

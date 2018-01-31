@@ -51,6 +51,7 @@ const mutations = {
     let task = state.tasks[id]
     if (p.name) task.name = p.name
     if (p.description) task.description = p.description
+    if (p.hasOwnProperty('isArchived')) task.isArchived = p.isArchived
   },
   changeDescription (state, p) {
     let id = p.taskId
@@ -100,6 +101,7 @@ const mutations = {
     state.lists = board.lists
     state.tasks = board.tasks
     state.deps = board.deps
+    console.log(state)
   },
   saveBoard (state) {
     let jsonString = JSON.stringify(state, undefined, 2)
@@ -153,6 +155,9 @@ const getters = {
   },
   task: (state) => (taskId) => {
     return state.tasks[taskId]
+  },
+  tasks: (state) => {
+    return state.tasks
   },
   taskDepPrevIds: (state) => (taskId) => {
     return state.tasks[taskId].prevIds
