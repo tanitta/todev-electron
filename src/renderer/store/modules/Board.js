@@ -4,6 +4,9 @@ import Path from 'path'
 import Mkdirp from 'mkdirp'
 import Migrators from '../helpers/migrators'
 import Semver from 'semver'
+import { remote } from 'electron'
+
+let boardFilePath = Path.join(remote.app.getPath('userData'), 'board.json')
 
 const state = {
   version: '0.0.0',
@@ -83,7 +86,6 @@ const mutations = {
         return false
       }
     }
-    let boardFilePath = process.cwd() + '/.todev/board.json'
     if (!check(boardFilePath)) {
       Mkdirp.sync(Path.dirname(boardFilePath))
       let board = {
@@ -105,7 +107,6 @@ const mutations = {
   },
   saveBoard (state) {
     let jsonString = JSON.stringify(state, undefined, 2)
-    let boardFilePath = process.cwd() + '/.todev/board.json'
     FileSystem.writeFileSync(boardFilePath, jsonString)
   },
   mightMigrate (state) {
