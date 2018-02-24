@@ -36,7 +36,6 @@
         return this.$store.getters.task(id)
       },
       depSort: function () {
-        console.log(this.$store)
         let sortOp = new TopSort(new Map())
         let edges = []
         for (let taskId of this.allTaskIds) {
