@@ -67,9 +67,6 @@
         let canvasPos = document.getElementById('dep-tree-canvas').getBoundingClientRect()
 
         ctx.clearRect(0, 0, canvasPos.width, canvasPos.height)
-        let color = 'rgb(230, 230, 230)'
-        ctx.fillStyle = color
-        ctx.strokeStyle = color
         ctx.lineWidth = 3
         let offset = 16
         let radius = 5
@@ -95,6 +92,24 @@
             y: (startPos.y + finishPos.y) / 2
           }
 
+          let color = 'rgb(240, 240, 240)'
+          {
+            let prevTask = this.task(edge.from)
+            let numPrevNoArchivedTasks = prevTask.prevIds.map(id => this.task(id)).filter(task => !task.isArchived).length
+            if (prevTask.isArchived) {
+              color = 'rgb(240, 240, 240)'
+            } else {
+              if (numPrevNoArchivedTasks === 0) {
+                color = 'hsl(100, 80%, 70%)'
+              } else {
+                color = 'rgb(200, 200, 200)'
+              }
+            }
+          }
+
+          ctx.fillStyle = color
+          ctx.strokeStyle = color
+
           ctx.beginPath()
           ctx.moveTo(startPos.x, startPos.y)
           ctx.bezierCurveTo(
@@ -116,6 +131,7 @@
           ctx.stroke()
         })
 
+        ctx.strokeStyle = 'rgb(230, 230, 230)'
         this.allTaskIds.forEach((taskId) => {
           let task = this.task(taskId)
           if (this.$refs['t' + taskId]) {
