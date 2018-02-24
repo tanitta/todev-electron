@@ -104,13 +104,15 @@ export default{
       this.isChangingName = false
     },
     open: function (payload) {
+      console.log('opended')
       this.taskId = payload.taskId
       this.name = this.task.name
       if (payload.isFocus) {
         this.focusName()
       }
-      this.prevDepIds = []
-      this.nextDepIds = []
+
+      this.prevDepIds.splice(0)
+      this.nextDepIds.splice(0)
       for (let id of this.task.prevIds) {
         this.prevDepIds.push(id)
       }
@@ -149,6 +151,7 @@ export default{
   },
   mounted: function () {
     EventBus.$on('open-task-editor', this.open)
+    EventBus.$on('close-task-editor', this.close)
     document.addEventListener('keyup', this.escapeKeyListener)
 
     this.prevDepEventBus.$on('addDepsToTask', depId => {

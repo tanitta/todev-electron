@@ -2,8 +2,8 @@
   <div>
     <div class="dep-list">
       <template v-for="item in depIds">
-        <div class="dep-container " >
-          <div class="item1">
+        <div class="dep-container">
+          <div class="item1" v-on:click="moveTask(item)">
             {{depName(item)}}
           </div>
           <div class="item2">
@@ -34,6 +34,8 @@
 </template>
 
 <script>
+  import EventBus from './../event-bus'
+
   export default {
     name: 'dep-selector',
     props: [
@@ -65,6 +67,10 @@
     computed: {
     },
     methods: {
+      moveTask: function (taskId) {
+        EventBus.$emit('close-task-editor')
+        EventBus.$emit('open-task-editor', { taskId: taskId })
+      },
       depName: function (id) {
         let task = this.$store.getters.task(id)
         let name = task.name
