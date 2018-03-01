@@ -99,7 +99,7 @@
               color = 'rgb(240, 240, 240)'
             } else {
               if (numPrevNoArchivedTasks === 0) {
-                color = 'hsl(100, 80%, 70%)'
+                color = 'hsl(100, 80%, 82%)'
               } else {
                 color = 'rgb(200, 200, 200)'
               }
