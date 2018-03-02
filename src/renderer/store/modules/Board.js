@@ -150,6 +150,12 @@ const actions = {
 }
 
 const getters = {
+  isArchivable: (state, getters) => taskId => {
+    let task = getters.task(taskId)
+    let numPrevNoArchivedTasks = task.prevIds.map(id => getters.task(id)).filter(task => !task.isArchived).length
+    console.log(numPrevNoArchivedTasks)
+    return numPrevNoArchivedTasks === 0
+  },
   taskIds: state => listId => {
     let list = state.lists[listId]
     return list.taskIds

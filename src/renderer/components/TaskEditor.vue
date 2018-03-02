@@ -88,6 +88,11 @@ export default{
         return this.task.isArchived
       },
       set: function (f) {
+        if (f && !this.$store.getters.isArchivable(this.taskId)) {
+          if (!confirm('Archive task?')) {
+            return
+          }
+        }
         this.$store.commit('changeTask', {taskId: this.taskId, isArchived: f})
       }
     }
