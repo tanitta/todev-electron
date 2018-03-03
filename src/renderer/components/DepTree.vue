@@ -18,11 +18,16 @@
     name: 'dep-tree',
     components: { DepTreeCard },
     computed: {
-      tasks: function () {
-        return this.$store.getters.allTaskIds.map(id => this.$store.getters.task(id))
-      },
       allTaskIds: function () {
-        return this.$store.getters.allTaskIds
+        let allTaskIds = []
+        for (let listId of this.$store.getters.listIds) {
+          let list = this.$store.getters.list(listId)
+          allTaskIds = [ ...allTaskIds, ...list.taskIds.reverse() ]
+        }
+        return allTaskIds
+      },
+      tasks: function () {
+        return this.allTaskIds.map(id => this.$store.getters.task(id))
       }
     },
     mounted: function () {
