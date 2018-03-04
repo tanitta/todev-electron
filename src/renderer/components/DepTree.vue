@@ -19,15 +19,7 @@
     components: { DepTreeCard },
     computed: {
       allTaskIds: function () {
-        let allTaskIds = []
-        for (let listId of this.$store.getters.listIds) {
-          let list = this.$store.getters.list(listId)
-          allTaskIds = [ ...allTaskIds, ...list.taskIds.reverse() ]
-        }
-        return allTaskIds
-      },
-      tasks: function () {
-        return this.allTaskIds.map(id => this.$store.getters.task(id))
+        return this.$store.getters.allTaskIds
       }
     },
     mounted: function () {
@@ -136,7 +128,7 @@
         })
 
         ctx.strokeStyle = 'rgb(230, 230, 230)'
-        this.allTaskIds.forEach((taskId) => {
+        this.allTaskIds.reverse().forEach((taskId) => {
           let task = this.task(taskId)
           if (this.$refs['t' + taskId]) {
             let taskRect = this.$refs['t' + taskId][0].getBoundingClientRect()
